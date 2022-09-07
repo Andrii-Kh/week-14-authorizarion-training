@@ -1,5 +1,6 @@
 const UPDATE_LOGIN = 'UPDATE_LOGIN'
 const UPDATE_PASSWORD = 'UPDATE_PASSWORD'
+const LOGIN = 'LOGIN'
 
 const initialState = {
   login: '',
@@ -25,4 +26,20 @@ export function updateLoginField(login) {
 
 export function updatePasswordField(password) {
   return { type: UPDATE_PASSWORD, password }
+}
+
+export function signIn() {
+  return (dispatch, getState) => {
+    const {login, password} = getState().auth
+    fetch('/api/v1/ayth', {
+      method: 'POST',
+      body: {
+        login, password
+      }
+    })
+    .then(r => r.json())
+    .then(data => {
+      dispatch({ type: LOGIN, token: data.token })
+    })
+  }
 }

@@ -3,14 +3,14 @@ const UPDATE_PASSWORD = 'UPDATE_PASSWORD'
 const LOGIN = 'LOGIN'
 
 const initialState = {
-  login: '',
+  email: '',
   password: ''
 }
 /* eslint-disable default-param-last */
 export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_LOGIN: {
-      return {...state, login: action.login}
+      return { ...state, email: action.email }
     }
     case UPDATE_PASSWORD: {
       return {...state, password: action.password}
@@ -20,8 +20,8 @@ export default (state = initialState, action) => {
   }
 }
 
-export function updateLoginField(login) {
-  return { type: UPDATE_LOGIN, login}
+export function updateLoginField(email) {
+  return { type: UPDATE_LOGIN, email }
 }
 
 export function updatePasswordField(password) {
@@ -30,14 +30,14 @@ export function updatePasswordField(password) {
 
 export function signIn() {
   return (dispatch, getState) => {
-    const { login, password } = getState().auth
+    const { email, password } = getState().auth
     fetch('/api/v1/auth', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        login,
+        email,
         password
       })
     })

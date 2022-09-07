@@ -30,16 +30,20 @@ export function updatePasswordField(password) {
 
 export function signIn() {
   return (dispatch, getState) => {
-    const {login, password} = getState().auth
-    fetch('/api/v1/ayth', {
+    const { login, password } = getState().auth
+    fetch('/api/v1/auth', {
       method: 'POST',
-      body: {
-        login, password
-      }
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        login,
+        password
+      })
     })
-    .then(r => r.json())
-    .then(data => {
-      dispatch({ type: LOGIN, token: data.token })
-    })
+      .then((r) => r.json())
+      .then((data) => {
+        dispatch({ type: LOGIN, token: data.token })
+      })
   }
 }

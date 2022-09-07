@@ -8,7 +8,7 @@ import mongooseService from './services/mongoose'
 import config from './config'
 import Html from '../client/html'
 
-mongooseService.connect()  
+mongooseService.connect()
 
 require('colors')
 

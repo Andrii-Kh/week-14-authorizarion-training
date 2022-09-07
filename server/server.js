@@ -4,8 +4,11 @@ import cors from 'cors'
 import sockjs from 'sockjs'
 
 import cookieParser from 'cookie-parser'
+import mongooseService from './services/mongoose'
 import config from './config'
 import Html from '../client/html'
+
+mongooseService.connect()  
 
 require('colors')
 

@@ -35,11 +35,34 @@ userSchema.pre('save', async function (next) {
 
 userSchema.method({
   passwordMatches(password) {
-    console.log(bcrypt.hashSync(password), this.password)
+    /* console.log(bcrypt.hashSync(password), this.password) */
     return bcrypt.compareSync(password, this.password)
   }
 })
 
+userSchema.statics.findAndValidateUser = async function ({ email, password }) {
+  if (!email) {
+    throw new Error('No Email')
+  }
+  if (!password) {
+    throw new Error('No Password')
+  }
+
+  const user = await this.findOne({ email }).exec()
+  if (!user) {
+    throw new Error('No User')
+  }
+
+  const isPasswordOk = await user.passwordMatches(password)
+
+  if (!isPasswordOk) {
+    throw new Error('PasswordIncorrect')
+  }
+
+  return user
+}
+
+/*
 userSchema.statics = {
   async findAndValidateUser({ email, password }) {
     if (!email) {
@@ -59,9 +82,10 @@ userSchema.statics = {
     if (!isPasswordOk) {
       throw new Error('PasswordIncorrect')
     }
-  
+
     return user
   }
 }
+*/
 
 export default mongoose.model('users', userSchema)

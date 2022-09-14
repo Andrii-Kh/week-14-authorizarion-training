@@ -6,13 +6,15 @@ import sockjs from 'sockjs'
 import cookieParser from 'cookie-parser'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
+import * as dotenv from 'dotenv'
 import mongooseService from './services/mongoose'
 import passportJWT from './services/passport'
-/* import config from './config' */
+import config from './config'
+import User from './model/User.model'
 import Html from '../client/html'
-
-const User = require('./model/User.model')
-const config = require('./config')
+/* const User = require('./model/User.model') */
+/* const config = require('./config') */
+dotenv.config()
 
 mongooseService.connect()
 
@@ -37,9 +39,11 @@ passport.use('jwt', passportJWT.jwt)
 middleware.forEach((it) => server.use(it))
 
 server.post('/api/v1/auth', async (req, res) => {
-  console.log(req.body)
+  console.log('--------', req.body)
+  console.log(User)
   try {
-    const user = await User.findAndValidateUser(req.body)
+    const { email, password } = req.body
+    const user = await User.findAndValidateUser({ email, password })
 
     const payload = { uid: user.id }
     const token = jwt.sign(payload, config.secret, { expiresIn: '48h' })

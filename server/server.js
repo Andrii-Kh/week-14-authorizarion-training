@@ -9,9 +9,11 @@ import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import mongooseService from './services/mongoose'
 import passportJWT from './services/passport'
+import auth from './middleware/auth'
 import config from './config'
 import User from './model/User.model'
 import Html from '../client/html'
+
 /* const User = require('./model/User.model') */
 /* const config = require('./config') */
 dotenv.config()
@@ -38,6 +40,10 @@ passport.use('jwt', passportJWT.jwt)
 
 middleware.forEach((it) => server.use(it))
 
+server.get('/api/v1/user-info', auth([]), (req, res) => {
+  res.json({ status: '123' })
+})
+
 server.get('/api/v1/auth', async (req, res) => {
   try {
     const jwtUser = jwt.verify(req.cookies.token, config.secret)
@@ -52,7 +58,7 @@ server.get('/api/v1/auth', async (req, res) => {
     console.log(err)
     res.json({ status: 'error', err })
   }
-})  
+})
 
 server.post('/api/v1/auth', async (req, res) => {
   console.log('--------', req.body)

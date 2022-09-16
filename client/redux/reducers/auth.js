@@ -1,13 +1,15 @@
+import Cookies from 'universal-cookie'
 import { history } from '..'
 
 const UPDATE_LOGIN = 'UPDATE_LOGIN'
 const UPDATE_PASSWORD = 'UPDATE_PASSWORD'
 const LOGIN = 'LOGIN'
 
+const cookies = new Cookies()
 const initialState = {
   email: '',
   password: '',
-  token: '',
+  token: cookies.get('token'),
   user: {}
 }
 /* eslint-disable default-param-last */
@@ -48,6 +50,17 @@ export function signIn() {
         password
       })
     })
+      .then((r) => r.json())
+      .then((data) => {
+        dispatch({ type: LOGIN, token: data.token, user: data.user })
+        history.push('/private')
+      })
+  }
+}
+
+export function trySignIn() {
+  return (dispatch) => {
+    fetch('/api/v1/auth')
       .then((r) => r.json())
       .then((data) => {
         dispatch({ type: LOGIN, token: data.token, user: data.user })

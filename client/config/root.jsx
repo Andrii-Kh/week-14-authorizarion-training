@@ -50,7 +50,7 @@ const RootComponent = (props) => {
             <Route exact path="/" component={Home} />
             <Route exact path="/dashboard" component={Home} />
             <PrivateRoute exact path="/private" component={PrivateComponent} />
-            <OnlyAnonymousRoute exact path="/login" component={PrivateComponent} />
+            <OnlyAnonymousRoute exact path="/login" component={Home} />
 
             <Route component={NotFound} />
           </Switch>

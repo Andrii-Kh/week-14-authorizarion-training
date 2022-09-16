@@ -40,14 +40,15 @@ middleware.forEach((it) => server.use(it))
 
 server.post('/api/v1/auth', async (req, res) => {
   console.log('--------', req.body)
-  console.log(User)
+  /* console.log(User) */
   try {
     const { email, password } = req.body
     const user = await User.findAndValidateUser({ email, password })
 
     const payload = { uid: user.id }
     const token = jwt.sign(payload, config.secret, { expiresIn: '48h' })
-    res.json({ status: 'ok', token })
+    delete user.password
+    res.json({ status: 'ok', token, user })
   } catch (err) {
     console.log(err)
     res.json({ status: 'error', err })

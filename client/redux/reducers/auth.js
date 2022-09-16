@@ -1,16 +1,23 @@
+import { history } from '..'
+
 const UPDATE_LOGIN = 'UPDATE_LOGIN'
 const UPDATE_PASSWORD = 'UPDATE_PASSWORD'
 const LOGIN = 'LOGIN'
 
 const initialState = {
   email: '',
-  password: ''
+  password: '',
+  token: '',
+  user: {}
 }
 /* eslint-disable default-param-last */
 export default (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_LOGIN: {
       return { ...state, email: action.email }
+    }
+    case LOGIN: {
+      return { ...state, token: action.token, password: '', user: action.user }
     }
     case UPDATE_PASSWORD: {
       return {...state, password: action.password}
@@ -43,7 +50,8 @@ export function signIn() {
     })
       .then((r) => r.json())
       .then((data) => {
-        dispatch({ type: LOGIN, token: data.token })
+        dispatch({ type: LOGIN, token: data.token, user: data.user })
+        history.push('/private')
       })
   }
 }

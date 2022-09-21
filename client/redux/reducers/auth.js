@@ -51,9 +51,10 @@ export function signIn() {
       })
     })
       .then((r) => r.json())
+
       .then((data) => {
         dispatch({ type: LOGIN, token: data.token, user: data.user })
-        history.push('/private')
+         history.push('/private')
       })
   }
 }
@@ -71,7 +72,9 @@ export function trySignIn() {
 
 export function tryGetUserInfo() {
   return () => {
-    fetch('/api/v1/user-info')
+    fetch(
+      '/api/v1/user-info'
+    )
       .then((r) => r.json())
       .then((data) => {
         console.log(data)
